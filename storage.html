@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>html5 - storage</title>
+<style>
+button{margin:10px;}
+#myDIV{ border:1px solid #ccc; background:#eee; margin:50px; width:500px; height:auto; padding:30px;}
+</style>
+</head>
+<body>
+<button onClick="setItem('user', '习近平')">设置user键</button>
+<button onClick="setItem('user', '李克强')">改变user键</button>
+<button onClick="getItem('user')">获取user键</button>
+<button onClick="removeItem('user')">删除user键</button>
+<button onClick="clearStorage()">清空本地存储</button>
+<div id="myDIV"></div>
+<script>
+//自定义事件函数，监听存储区域变化
+function storageHandler(e){
+	if (!e) { e = window.event; } 
+	var myDIV = document.getElementById("myDIV");
+	myDIV.innerHTML = "存储发生了变化：<br /><b>" + e.key + "</b> 键改变了。<br />旧值 <b> " + e.oldValue + "</b> 被改变为新值 <b>" + e.newValue + "</b><br />发生改变的网址为：<b>" + e.url + "</b>";
+}
+
+//监听
+if (window.addEventListener) {  
+  window.addEventListener("storage", storageHandler, false);  
+} else {  
+  window.attachEvent("onstorage", storageHandler);  
+}; 
+
+var strDomin = '127.0.0.1';
+try{
+	var oStorage = window.localStorage ? window.localStorage : window.globalStorage[varDomin];//兼容
+}catch(err) {
+	alert(err.message ? err.message : err.toString());	
+}
+
+function getItem(key){
+	var myDIV = document.getElementById('myDIV');
+	myDIV.innerHTML = oStorage.getItem(key); //storage的getItem()方法	
+}
+
+function setItem(key, value){
+	oStorage.setItem(key, value);
+	alert("DOM STORAGE: " + key + " = " + value);	
+}
+
+function removeItem(key){
+	oStorage.removeItem(key);
+	alert("键 " + key + " 被移除了");	
+}
+
+function clearStorage(){
+	alert(oStorage.remainingSpace);	 //仅ie支持remainingSpace
+	oStorage.clear();
+	alert(oStorage.remainingSpace);	 //undefined
+}
+</script>
+
+</body>
+</html>
